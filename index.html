@@ -42,6 +42,9 @@
       background-color: #fff;
       color: #333;
     }
+    input[type="text"] {
+      text-transform: uppercase; /* Transformar automáticamente en mayúsculas */
+    }
     button {
       background-color: #4a90e2;
       color: #fff;
@@ -74,11 +77,11 @@
     .ticket img {
       display: block;
       margin: auto;
-      max-width: 150px; /* Ajustar el tamaño del QR para que sea más grande */
+      max-width: 180px; /* Aumentar aún más el tamaño del QR */
     }
     .total-center {
       text-align: center;
-      font-size: 24px;
+      font-size: 28px; /* Hacer el total mucho más grande */
       font-weight: 700;
     }
     .print-btn {
@@ -105,6 +108,11 @@
         top: 0;
       }
     }
+
+    /* Negritas para la fecha */
+    .bold {
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
@@ -119,6 +127,9 @@
       <option value="G">G</option>
       <option value="H">H</option>
     </select><br>
+
+    <label for="responsable">Responsable:</label>
+    <input type="text" id="responsable" name="responsable" placeholder="Nombre del responsable" required><br>
 
     <label for="mil">$1000:</label>
     <input type="number" id="mil" name="mil" value="0" required><br>
@@ -146,7 +157,8 @@
 
   <div id="ticketResult" class="ticket" style="display:none;">
     <h2 id="sucursalResult"></h2>
-    <p id="fechaResult"></p>
+    <p id="responsableResult"></p>
+    <p><span id="fechaResult" class="bold"></span></p>
     <p id="detallesResult"></p>
     <img id="qrCode" src="" alt="Código QR">
     <h3 class="total-center">Total: $<span id="totalResult"></span></h3>
@@ -165,6 +177,7 @@
       event.preventDefault();
 
       const sucursal = document.getElementById('sucursal').value;
+      const responsable = document.getElementById('responsable').value.toUpperCase(); // Forzar mayúsculas
       const fecha = new Date().toLocaleString();
       const billetes = {
         mil: parseInt(document.getElementById('mil').value),
@@ -187,6 +200,7 @@
 
       // Mostrar resultados
       document.getElementById('sucursalResult').innerText = `Sucursal: ${sucursal}`;
+      document.getElementById('responsableResult').innerText = `Responsable: ${responsable}`;
       document.getElementById('fechaResult').innerText = `Fecha: ${fecha}`;
       document.getElementById('detallesResult').innerHTML = detalles;
       document.getElementById('totalResult').innerText = formatNumber(total);
@@ -194,11 +208,13 @@
       // Generar QR
       const qrData = {
         sucursal: sucursal,
+        responsable: responsable,
         fecha: fecha,
         total: total,
         billetes: billetes
       };
-      QRCode.toDataURL(JSON.stringify(qrData), function (err, url) {
+
+      QRCode.toDataURL(JSON.stringify(qrData), { width: 400, margin: 1 }, function (err, url) {
         if (!err) {
           document.getElementById('qrCode').src = url;
         }
