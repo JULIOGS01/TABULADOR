@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Administrador de Sobres</title>
+  
+  <!-- Agregar la fuente Poppins desde Google Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap">
+  
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f4f6f8;
+      color: #333;
+      margin: 0;
+      padding: 10px;
+      max-width: 800px;
+      margin: auto;
+    }
+    h1 {
+      color: #4a90e2;
+      text-align: center;
+      margin-bottom: 15px;
+      font-size: 22px;
+    }
+    label {
+      color: #4a90e2;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    input, select, button {
+      display: block;
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    select {
+      background-color: #fff;
+      color: #333;
+    }
+    button {
+      background-color: #4a90e2;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    button:hover {
+      background-color: #357abd;
+    }
+    .ticket {
+      width: 80mm;
+      border: 1px solid #4a90e2;
+      padding: 15px;
+      margin-top: 15px;
+      background-color: #fff;
+      font-size: 16px;
+    }
+    .ticket h2 {
+      color: #4a90e2;
+      margin-bottom: 8px;
+      font-size: 20px;
+    }
+    .ticket p, .ticket h3 {
+      margin: 0;
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+    .ticket img {
+      display: block;
+      margin: auto;
+      max-width: 150px; /* Ajustar el tamaño del QR para que sea más grande */
+    }
+    .total-center {
+      text-align: center;
+      font-size: 24px;
+      font-weight: 700;
+    }
+    .print-btn {
+      margin-top: 20px;
+      background-color: #28a745;
+      color: #fff;
+      font-size: 14px;
+    }
+    .print-btn:hover {
+      background-color: #218838;
+    }
+
+    /* Optimización para impresión */
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      .ticket, .ticket * {
+        visibility: visible;
+      }
+      .ticket {
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Ingreso de Billetes</h1>
+  <form id="billetesForm">
+    <label for="sucursal">Sucursal:</label>
+    <select id="sucursal" name="sucursal" required>
+      <option value="A">A</option>
+      <option value="B">B</option>
+      <option value="D">D</option>
+      <option value="F">F</option>
+      <option value="G">G</option>
+      <option value="H">H</option>
+    </select><br>
+
+    <label for="mil">$1000:</label>
+    <input type="number" id="mil" name="mil" value="0" required><br>
+
+    <label for="quinientos">$500:</label>
+    <input type="number" id="quinientos" name="quinientos" value="0" required><br>
+
+    <label for="doscientos">$200:</label>
+    <input type="number" id="doscientos" name="doscientos" value="0" required><br>
+
+    <label for="cien">$100:</label>
+    <input type="number" id="cien" name="cien" value="0" required><br>
+
+    <label for="cincuenta">$50:</label>
+    <input type="number" id="cincuenta" name="cincuenta" value="0" required><br>
+
+    <label for="veinte">$20:</label>
+    <input type="number" id="veinte" name="veinte" value="0" required><br>
+
+    <label for="monedas">Monedas:</label>
+    <input type="number" id="monedas" name="monedas" value="0" required><br>
+
+    <button type="submit">Generar QR</button>
+  </form>
+
+  <div id="ticketResult" class="ticket" style="display:none;">
+    <h2 id="sucursalResult"></h2>
+    <p id="fechaResult"></p>
+    <p id="detallesResult"></p>
+    <img id="qrCode" src="" alt="Código QR">
+    <h3 class="total-center">Total: $<span id="totalResult"></span></h3>
+  </div>
+
+  <!-- Botón de impresión fuera de la etiqueta -->
+  <button class="print-btn" onclick="window.print();">Imprimir Etiqueta</button>
+
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js"></script>
+  <script>
+    function formatNumber(number) {
+      return new Intl.NumberFormat('es-MX').format(number);
+    }
+
+    document.getElementById('billetesForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const sucursal = document.getElementById('sucursal').value;
+      const fecha = new Date().toLocaleString();
+      const billetes = {
+        mil: parseInt(document.getElementById('mil').value),
+        quinientos: parseInt(document.getElementById('quinientos').value),
+        doscientos: parseInt(document.getElementById('doscientos').value),
+        cien: parseInt(document.getElementById('cien').value),
+        cincuenta: parseInt(document.getElementById('cincuenta').value),
+        veinte: parseInt(document.getElementById('veinte').value),
+        monedas: parseInt(document.getElementById('monedas').value)
+      };
+
+      const total = (billetes.mil * 1000) + (billetes.quinientos * 500) +
+                    (billetes.doscientos * 200) + (billetes.cien * 100) +
+                    (billetes.cincuenta * 50) + (billetes.veinte * 20) + billetes.monedas;
+
+      const detalles = `$1000: ${billetes.mil}<br>$500: ${billetes.quinientos}<br>` + 
+                       `$200: ${billetes.doscientos}<br>$100: ${billetes.cien}<br>` + 
+                       `$50: ${billetes.cincuenta}<br>$20: ${billetes.veinte}<br>` + 
+                       `Monedas: ${billetes.monedas}`;
+
+      // Mostrar resultados
+      document.getElementById('sucursalResult').innerText = `Sucursal: ${sucursal}`;
+      document.getElementById('fechaResult').innerText = `Fecha: ${fecha}`;
+      document.getElementById('detallesResult').innerHTML = detalles;
+      document.getElementById('totalResult').innerText = formatNumber(total);
+
+      // Generar QR
+      const qrData = {
+        sucursal: sucursal,
+        fecha: fecha,
+        total: total,
+        billetes: billetes
+      };
+      QRCode.toDataURL(JSON.stringify(qrData), function (err, url) {
+        if (!err) {
+          document.getElementById('qrCode').src = url;
+        }
+      });
+
+      document.getElementById('ticketResult').style.display = 'block';
+    });
+  </script>
+</body>
+</html>
