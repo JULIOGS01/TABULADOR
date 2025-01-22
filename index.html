@@ -63,6 +63,7 @@
       margin-top: 15px;
       background-color: #fff;
       font-size: 16px;
+      font-family: 'Poppins', sans-serif; /* Asegurar la fuente */
     }
     .ticket h2 {
       color: #4a90e2;
@@ -123,12 +124,12 @@
 
     <label for="sucursal">Sucursal:</label>
     <select id="sucursal" name="sucursal" required>
-      <option value="AMIRA">AMIRA</option>
-      <option value="BELEM">BELEM</option>
-      <option value="CARLA">CARLA</option>
-      <option value="DANNA">DANNA</option>
-      <option value="ELENA">ELENA</option>
-      <option value="FANNY">FANNY</option>
+      <option value="A">AMIRA</option>
+      <option value="B">BELEM</option>
+      <option value="C">CARLA</option>
+      <option value="D">DANNA</option>
+      <option value="E">ELENA</option>
+      <option value="F">FANNY</option>
     </select><br>
 
     <label for="responsable">Responsable:</label>
@@ -172,6 +173,7 @@
   <button class="print-btn" id="downloadBtn">Descargar Etiqueta</button>
 
   <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <script>
     function formatNumber(number) {
       return new Intl.NumberFormat('es-MX').format(number);
@@ -184,8 +186,11 @@
 
     function printEtiqueta() {
       const printContent = document.querySelector('.ticket');
-      const newWindow = window.open('', '', 'width=400,height=600');
-      newWindow.document.write(printContent.outerHTML);
+      const newWindow = window.open('', '', 'width=80mm,height=600');
+      newWindow.document.write(`<!DOCTYPE html><html><head><style>
+        body { font-family: 'Poppins', sans-serif; }
+        .ticket { width: 80mm; margin: 0 auto; }
+      </style></head><body>${printContent.outerHTML}</body></html>`);
       newWindow.document.close();
       newWindow.focus();
       newWindow.print();
@@ -194,9 +199,14 @@
 
     function downloadEtiqueta() {
       const ticket = document.querySelector('.ticket');
+      const sucursal = document.getElementById('sucursal').value.charAt(0);
+      const fecha = document.getElementById('fecha').value;
+      const [year, month, day] = fecha.split('-');
+      const fileName = `${sucursal}${day}${month}`;
+
       html2canvas(ticket).then(canvas => {
         const link = document.createElement('a');
-        link.download = 'etiqueta.png';
+        link.download = `${fileName}.png`;
         link.href = canvas.toDataURL();
         link.click();
       });
@@ -254,6 +264,5 @@
 
     document.getElementById('downloadBtn').addEventListener('click', downloadEtiqueta);
   </script>
-  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </body>
 </html>
