@@ -167,8 +167,9 @@
     <h3 class="total-center">Total: $<span id="totalResult"></span></h3>
   </div>
 
-  <!-- Botón de impresión fuera de la etiqueta -->
-  <button class="print-btn" onclick="window.print();">Imprimir Etiqueta</button>
+  <!-- Botones para imprimir y descargar etiqueta -->
+  <button class="print-btn" onclick="printEtiqueta();">Imprimir Etiqueta</button>
+  <button class="print-btn" id="downloadBtn">Descargar Etiqueta</button>
 
   <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js"></script>
   <script>
@@ -179,6 +180,26 @@
     function formatDate(fecha) {
       const [year, month, day] = fecha.split('-');
       return `${day}/${month}/${year}`;
+    }
+
+    function printEtiqueta() {
+      const printContent = document.querySelector('.ticket');
+      const newWindow = window.open('', '', 'width=400,height=600');
+      newWindow.document.write(printContent.outerHTML);
+      newWindow.document.close();
+      newWindow.focus();
+      newWindow.print();
+      newWindow.close();
+    }
+
+    function downloadEtiqueta() {
+      const ticket = document.querySelector('.ticket');
+      html2canvas(ticket).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'etiqueta.png';
+        link.href = canvas.toDataURL();
+        link.click();
+      });
     }
 
     document.getElementById('billetesForm').addEventListener('submit', function(event) {
@@ -230,6 +251,9 @@
 
       document.getElementById('ticketResult').style.display = 'block';
     });
+
+    document.getElementById('downloadBtn').addEventListener('click', downloadEtiqueta);
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </body>
 </html>
