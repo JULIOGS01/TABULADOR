@@ -124,6 +124,7 @@
 
     <label for="sucursal">Sucursal:</label>
     <select id="sucursal" name="sucursal" required>
+      <option value="" selected disabled>Seleccionar Sucursal</option>
       <option value="A">AMIRA</option>
       <option value="B">BELEM</option>
       <option value="C">CARLA</option>
@@ -185,16 +186,17 @@
     }
 
     function printEtiqueta() {
-      const printContent = document.querySelector('.ticket');
-      const newWindow = window.open('', '', 'width=80mm,height=600');
-      newWindow.document.write(`<!DOCTYPE html><html><head><style>
-        body { font-family: 'Poppins', sans-serif; }
-        .ticket { width: 80mm; margin: 0 auto; }
-      </style></head><body>${printContent.outerHTML}</body></html>`);
-      newWindow.document.close();
-      newWindow.focus();
-      newWindow.print();
-      newWindow.close();
+      const ticket = document.querySelector('.ticket');
+      html2canvas(ticket).then(canvas => {
+        const printWindow = window.open('', '', 'width=80mm,height=600');
+        printWindow.document.write('<html><head><title>Etiqueta</title></head><body style="margin:0;padding:0;">');
+        printWindow.document.body.appendChild(canvas); // Añade el canvas directamente
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        printWindow.focus();
+        printWindow.print();
+        printWindow.close();
+      });
     }
 
     function downloadEtiqueta() {
