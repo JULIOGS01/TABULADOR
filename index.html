@@ -176,6 +176,11 @@
       return new Intl.NumberFormat('es-MX').format(number);
     }
 
+    function formatDate(fecha) {
+      const [year, month, day] = fecha.split('-');
+      return `${day}/${month}/${year}`;
+    }
+
     document.getElementById('billetesForm').addEventListener('submit', function(event) {
       event.preventDefault();
 
@@ -204,13 +209,13 @@
       // Mostrar resultados
       document.getElementById('sucursalResult').innerText = `Sucursal: ${sucursal}`;
       document.getElementById('responsableResult').innerText = `Responsable: ${responsable}`;
-      document.getElementById('fechaResult').innerText = `Fecha: ${fecha}`;
+      document.getElementById('fechaResult').innerText = `Fecha: ${formatDate(fecha)}`;
       document.getElementById('detallesResult').innerHTML = detalles;
       document.getElementById('totalResult').innerText = formatNumber(total);
 
       // Generar QR
       const qrData = {
-        fecha: fecha,
+        fecha: formatDate(fecha),
         sucursal: sucursal,
         responsable: responsable,
         total: total,
@@ -228,4 +233,3 @@
   </script>
 </body>
 </html>
-
