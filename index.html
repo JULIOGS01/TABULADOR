@@ -219,7 +219,6 @@
 
       const fecha = document.getElementById('fecha').value;
       const sucursal = document.getElementById('sucursal').value;
-      const sucursalNombre = document.querySelector(`#sucursal option[value="${sucursal}"]`).textContent; // Obtener texto de la sucursal seleccionada
       const responsable = document.getElementById('responsable').value.toUpperCase(); // Forzar mayúsculas
       const billetes = {
         mil: parseInt(document.getElementById('mil').value),
@@ -241,7 +240,7 @@
                        `Monedas: ${billetes.monedas}`;
 
       // Mostrar resultados
-      document.getElementById('sucursalResult').innerText = `Sucursal: ${sucursalNombre}`;
+      document.getElementById('sucursalResult').innerText = `Sucursal: ${sucursal}`;
       document.getElementById('responsableResult').innerText = `Responsable: ${responsable}`;
       document.getElementById('fechaResult').innerText = `Fecha: ${formatDate(fecha)}`;
       document.getElementById('detallesResult').innerHTML = detalles.replace(/\n/g, '<br>');
@@ -249,7 +248,7 @@
 
       // Generar QR con toda la información
       const qrData = {
-        sucursal: sucursalNombre,
+        sucursal: sucursal,
         responsable: responsable,
         fecha: formatDate(fecha),
         detalles: detalles,
