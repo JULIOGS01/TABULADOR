@@ -234,27 +234,22 @@
                     (billetes.doscientos * 200) + (billetes.cien * 100) +
                     (billetes.cincuenta * 50) + (billetes.veinte * 20) + billetes.monedas;
 
-      const detalles = `$1000: ${billetes.mil}\n$500: ${billetes.quinientos}\n` + 
-                       `$200: ${billetes.doscientos}\n$100: ${billetes.cien}\n` + 
-                       `$50: ${billetes.cincuenta}\n$20: ${billetes.veinte}\n` + 
-                       `Monedas: ${billetes.monedas}`;
+      const qrData = {
+        fecha: formatDate(fecha),
+        sucursal: sucursal,
+        responsable: responsable,
+        total: total,
+        billetes: billetes
+      };
 
       // Mostrar resultados
       document.getElementById('sucursalResult').innerText = `Sucursal: ${sucursal}`;
       document.getElementById('responsableResult').innerText = `Responsable: ${responsable}`;
       document.getElementById('fechaResult').innerText = `Fecha: ${formatDate(fecha)}`;
-      document.getElementById('detallesResult').innerHTML = detalles.replace(/\n/g, '<br>');
+      document.getElementById('detallesResult').innerHTML = `$1000: ${billetes.mil}<br>$500: ${billetes.quinientos}<br>$200: ${billetes.doscientos}<br>$100: ${billetes.cien}<br>$50: ${billetes.cincuenta}<br>$20: ${billetes.veinte}<br>Monedas: ${billetes.monedas}`;
       document.getElementById('totalResult').innerText = formatNumber(total);
 
-      // Generar QR con toda la información
-      const qrData = {
-        sucursal: sucursal,
-        responsable: responsable,
-        fecha: formatDate(fecha),
-        detalles: detalles,
-        total: formatNumber(total)
-      };
-
+      // Generar QR
       QRCode.toDataURL(JSON.stringify(qrData), { width: 400, margin: 1 }, function (err, url) {
         if (!err) {
           document.getElementById('qrCode').src = url;
