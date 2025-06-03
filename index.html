@@ -1,1096 +1,265 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Checador Jeeapcel - Panel</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f4f6fa;
-            min-height: 100vh;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        h2, h3, h4 {
-            color: #1a2233;
-            text-align: center;
-            margin-bottom: 10px;
-            letter-spacing: 1px;
-        }
-
-        .panel {
-            background: #fff;
-            border-radius: 16px;
-            box-shadow: 0 4px 24px 0 rgba(31, 38, 135, 0.10);
-            padding: 32px 36px 24px 36px;
-            margin: 32px auto 0 auto;
-            max-width: 600px;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .seccion {
-            background: #f8fafc;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-            padding: 24px 20px 16px 20px;
-            margin: 18px 0;
-            width: 100%;
-            display: none;
-            align-items: center;
-        }
-
-        form {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 0;
-        }
-
-        input, select, textarea {
-            padding: 10px 14px;
-            margin-top: 5px;
-            width: 90%;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            border: 1.5px solid #bfc9d9;
-            font-size: 1em;
-            background: #f7faff;
-            transition: border 0.2s;
-        }
-
-        input:focus, select:focus, textarea:focus {
-            border: 1.5px solid #4f8cff;
-            outline: none;
-            background: #f0f4ff;
-        }
-
-        button {
-            padding: 12px 28px;
-            background: #4f8cff;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 1.1em;
-            margin: 6px 4px;
-            box-shadow: 0 2px 8px rgba(79,140,255,0.08);
-            transition: background 0.2s, transform 0.1s;
-        }
-
-        button:hover {
-            background: #3b6ed6;
-            transform: translateY(-2px) scale(1.04);
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 14px;
-            background: #fff;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-        }
-
-        th {
-            background: #4f8cff;
-            color: #fff;
-            padding: 12px 0;
-            font-size: 1.05em;
-            letter-spacing: 0.5px;
-        }
-
-        td {
-            padding: 10px 0;
-            color: #222;
-            font-size: 1em;
-            background: #f9fbff;
-        }
-
-        tr:nth-child(even) td {
-            background: #eef3fa;
-        }
-
-        #mensaje {
-            margin-top: 24px;
-            font-size: 1.15em;
-            font-weight: bold;
-            color: #3b6ed6;
-            text-align: center;
-            letter-spacing: 0.5px;
-        }
-
-        #ultimoCheckIn {
-            margin-bottom: 18px;
-            color: #28a745;
-            font-weight: bold;
-            text-align: center;
-            font-size: 1.1em;
-        }
-
-        i.fas, i.far, i.fa-solid {
-            color: #4f8cff;
-            margin-right: 8px;
-        }
-        button i.fas {
-            color: #fff !important;
-        }
-
-        #loginForm {
-            width: 100%;
-            max-width: 320px;
-            margin: 32px auto 0 auto;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(31,38,135,0.07);
-            padding: 28px 18px 18px 18px;
-        }
-        #loginForm input {
-            width: 85%;
-            margin-bottom: 14px;
-            font-size: 1em;
-            border-radius: 6px;
-            border: 1.2px solid #bfc9d9;
-            background: #f7faff;
-            transition: border 0.2s, box-shadow 0.2s;
-            box-shadow: 0 1px 4px rgba(79,140,255,0.04);
-        }
-        #loginForm input:focus {
-            border: 1.5px solid #4f8cff;
-            background: #f0f4ff;
-            box-shadow: 0 2px 8px rgba(79,140,255,0.10);
-        }
-        #loginForm button {
-            width: 85%;
-            margin-top: 8px;
-            border-radius: 6px;
-            font-size: 1.08em;
-            background: #4f8cff;
-            transition: background 0.2s, transform 0.1s;
-        }
-        #loginForm button:hover {
-            background: #3b6ed6;
-            transform: translateY(-2px) scale(1.04);
-        }
-
-        /* Panel empleado botones optimizados */
-        #empleadoPanel .main-btns {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-            margin-bottom: 18px;
-            margin-top: 8px;
-        }
-        #empleadoPanel .main-btns button {
-            min-width: 140px;
-            max-width: 200px;
-            background: #f7faff;
-            color: #234;
-            border: 1.2px solid #bfc9d9;
-            font-size: 1em;
-            display: flex;
-            align-items: center;
-            gap: 7px;
-            transition: background 0.2s, color 0.2s, border 0.2s;
-        }
-        #empleadoPanel .main-btns button i {
-            color: #4f8cff !important;
-            margin-right: 6px;
-            font-size: 1.1em;
-            transition: color 0.2s;
-        }
-        #empleadoPanel .main-btns button:hover {
-            background: #e6f0ff;
-            color: #2563eb;
-            border: 1.2px solid #4f8cff;
-        }
-        #empleadoPanel .main-btns button:hover i {
-            color: #2563eb !important;
-        }
-        #empleadoPanel .check-btns {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-            margin: 18px 0 0 0;
-        }
-        #empleadoPanel .logout-btn {
-            display: flex;
-            justify-content: center;
-            margin: 18px 0 0 0;
-        }
-        #empleadoPanel #cerrarSesionEmpleado {
-            width: 180px;
-            background: #ff4d4f;
-            color: #fff;
-            border: none;
-            font-weight: bold;
-            font-size: 1.08em;
-            border-radius: 8px;
-            margin: 0 auto;
-            box-shadow: 0 2px 8px rgba(255,77,79,0.08);
-            transition: background 0.2s, transform 0.1s;
-        }
-        #empleadoPanel #cerrarSesionEmpleado:hover {
-            background: #d9363e;
-            transform: translateY(-2px) scale(1.04);
-        }
-
-        @media (max-width: 700px) {
-            .panel, .seccion {
-                max-width: 98vw;
-                padding: 12px 2vw;
-            }
-            table, th, td {
-                font-size: 0.95em;
-            }
-            input, select, textarea {
-                width: 98%;
-            }
-        }
-
-        /* Estilos del tabulador optimizados */
-        #seccionTabuladorEmpleado {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding-top: 10px;
-            padding-bottom: 10px;
-            max-width: 340px; /* Nuevo: ancho máximo más pequeño */
-            margin: 0 auto;   /* Nuevo: centrar horizontalmente */
-            box-sizing: border-box;
-        }
-
-        #seccionTabuladorEmpleado form {
-            max-width: 300px;
-            width: 100%;
-            margin: 0 auto;
-            padding: 0;
-            gap: 4px;
-        }
-
-        #seccionTabuladorEmpleado input,
-        #seccionTabuladorEmpleado select {
-            width: 100%;
-            max-width: 220px;
-            min-width: 100px;
-            margin: 0 auto 4px auto;
-            padding: 5px 8px;
-            font-size: 14px;
-            box-sizing: border-box;
-        }
-
-        #seccionTabuladorEmpleado label {
-            width: 100%;
-            max-width: 220px;
-            margin: 0 auto 1px auto;
-            display: block;
-            text-align: left;
-            font-size: 13px;
-        }
-
-        #seccionTabuladorEmpleado button,
-        #seccionTabuladorEmpleado .print-btn {
-            width: 220px;
-            max-width: 220px;
-            min-width: 120px;
-            margin: 10px auto 0 auto;
-            display: block;
-            font-size: 15px;
-            white-space: nowrap;
-        }
-
-        #seccionTabuladorEmpleado .ticket {
-            margin-left: auto;
-            margin-right: auto;
-            margin-top: 10px;
-            margin-bottom: 10px;
-            padding: 10px 5px;
-        }
-
-        #seccionTabuladorEmpleado .ticket h2,
-        #seccionTabuladorEmpleado .ticket h3 {
-            font-size: 17px;
-            margin-bottom: 6px;
-        }
-
-        #seccionTabuladorEmpleado .ticket p {
-            margin-bottom: 6px;
-            font-size: 14px;
-        }
-
-        #seccionTabuladorEmpleado .ticket img {
-            max-width: 120px;
-        }
-
-        #seccionTabuladorEmpleado .total-center {
-            font-size: 22px;
-            margin-top: 8px;
-            margin-bottom: 8px;
-        }
-
-        @media (max-width: 500px) {
-            #seccionTabuladorEmpleado form,
-            #seccionTabuladorEmpleado input,
-            #seccionTabuladorEmpleado select,
-            #seccionTabuladorEmpleado label,
-            #seccionTabuladorEmpleado button {
-                max-width: 98vw;
-                font-size: 13px;
-            }
-        }
-
-        /* NUEVOS ESTILOS PARA AMIGO PAGUITOS */
-        #seccionAmigoPaguitos {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-            background: #f8fafc;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-            margin: 18px 0;
-            width: 100%;
-            max-width: 600px;
-            margin-left: -20px; /* Más a la izquierda */
-            margin-right: 0;   /* Corrige: no uses auto aquí */
-        }
-
-        #seccionAmigoPaguitos h4 {
-            margin-bottom: 16px;
-            font-size: 1.2em;
-            color: #1a2233;
-        }
-
-        #seccionAmigoPaguitos iframe {
-            width: 100%;
-            max-width: 600px;
-            border: none;
-            border-radius: 8px;
-            height: 800px;
-            display: block;
-        }
-
-        /* NUEVOS ESTILOS PARA TARIFARIO */
-        #seccionTarifario {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-            background: #f8fafc;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-            margin: 18px 0;
-            width: 100%;
-            max-width: 600px;
-            margin-left: -20px; /* Más a la izquierda */
-            margin-right: 0;   /* Corrige: no uses auto aquí */
-        }
-
-        #seccionTarifario h4 {
-            margin-bottom: 16px;
-            font-size: 1.2em;
-            color: #1a2233;
-        }
-
-        #seccionTarifario iframe {
-            width: 100%;
-            max-width: 600px;
-            border: none;
-            border-radius: 8px;
-            height: 800px;
-            display: block;
-        }
-
-        @media (max-width: 700px) {
-            #seccionAmigoPaguitos,
-            #seccionTarifario {
-                margin-left: 0 !important;
-                margin-right: 0 !important;
-                max-width: 98vw;
-                padding: 12px 2vw;
-            }
-        }
-        /* FIN NUEVOS ESTILOS */
-    </style>
-    <script type="module">
-        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@latest/+esm';
-
-        const supabase = createClient(
-            'https://mubtfuksnxtbjxrrwzqh.supabase.co',
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im11YnRmdWtzbnh0Ymp4cnJ3enFoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg2Njc0OTcsImV4cCI6MjA2NDI0MzQ5N30.B7ZyBG2g4hCfdI2A2aX852icnHb_JPpfc0VyO0Zr4PA'
-        );
-
-        // VARIABLES GLOBALES PARA USUARIO Y SUCURSAL
-        let usuarioActual = null;
-        let sucursalActual = null;
-
-        window.addEventListener('DOMContentLoaded', () => {
-            // Oculta los paneles y botones de cerrar sesión al cargar la página
-            const adminPanel = document.getElementById('adminPanel');
-            const empleadoPanel = document.getElementById('empleadoPanel');
-            const cerrarSesionAdmin = document.getElementById('cerrarSesionAdmin');
-            const cerrarSesionEmpleado = document.getElementById('cerrarSesionEmpleado');
-            if (adminPanel) adminPanel.style.display = 'none';
-            if (empleadoPanel) empleadoPanel.style.display = 'none';
-            if (cerrarSesionAdmin) cerrarSesionAdmin.style.display = 'none';
-            if (cerrarSesionEmpleado) cerrarSesionEmpleado.style.display = 'none';
-
-            const loginForm = document.getElementById('loginForm');
-            const loginTitle = document.getElementById('loginTitle');
-            const mensaje = document.getElementById('mensaje');
-
-            // SECCION DE CARGA DE DATOS
-            const secciones = {
-                crear: document.getElementById('seccionCrear'),
-                verUsuarios: document.getElementById('seccionUsuarios'),
-                checadas: document.getElementById('seccionChecadas'),
-                aviso: document.getElementById('seccionAviso'),
-                reporte: document.getElementById('seccionReporte'),
-                avisosEmpleado: document.getElementById('seccionAvisosEmpleado'),
-                tabuladorEmpleado: document.getElementById('seccionTabuladorEmpleado'),
-                amigoPaguitos: document.getElementById('seccionAmigoPaguitos'),
-                tarifario: document.getElementById('seccionTarifario'),
-                // NUEVO:
-                inventario: document.getElementById('seccionInventario')
-            };
-
-            loginForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const nombre = document.getElementById('nombre').value.trim();
-                const nip = document.getElementById('nip').value.trim();
-
-                const { data, error } = await supabase
-                    .from('usuarios')
-                    .select('*')
-                    .eq('nombre', nombre)
-                    .eq('nip', nip)
-                    .eq('activo', true)
-                    .single();
-
-                if (error || !data) {
-                    mensaje.textContent = '❌ Usuario o NIP incorrecto';
-                } else {
-                    mensaje.textContent = `✅ Bienvenido, ${data.nombre} | Rol: ${data.rol}`;
-                    loginForm.style.display = 'none';
-                    loginTitle.textContent = '';
-                    cerrarSesionAdmin.style.display = 'inline-block';
-                    cerrarSesionEmpleado.style.display = 'inline-block';
-                    document.getElementById('bienvenida').textContent = `Bienvenido, ${data.nombre}`;
-
-                    usuarioActual = data; // <-- IMPORTANTE para el resto del código
-
-                    if (data.rol === 'admin') {
-                        adminPanel.style.display = 'block';
-                    } else if (data.rol === 'empleado') {
-                        // Usa fecha local para evitar desfase de día
-                        const hoy = new Date();
-                        const yyyy = hoy.getFullYear();
-                        const mm = String(hoy.getMonth() + 1).padStart(2, '0');
-                        const dd = String(hoy.getDate()).padStart(2, '0');
-                        const fechaLocal = `${yyyy}-${mm}-${dd}`;
-
-                        let sucursalGuardada = localStorage.getItem(`sucursalEmpleado_${data.id}_${fechaLocal}`);
-                        let sucursal = null;
-                        if (sucursalGuardada) {
-                            sucursal = sucursalGuardada;
-                        } else {
-                            sucursal = prompt("Selecciona tu sucursal (A, B, C, D, E, F):");
-                            if (['A', 'B', 'C', 'D', 'E', 'F'].includes(sucursal)) {
-                                localStorage.setItem(`sucursalEmpleado_${data.id}_${fechaLocal}`, sucursal);
-                            } else {
-                                mensaje.textContent = '❌ Sucursal no válida';
-                                return;
-                            }
-                        }
-                        empleadoPanel.style.display = 'block';
-                        document.getElementById('sucursalEmpleado').textContent = `Sucursal: ${sucursal}`;
-                        document.getElementById('seccionAvisosEmpleado').style.display = 'none';
-                        document.getElementById('seccionTabuladorEmpleado').style.display = 'none';
-                        cargarAvisos();
-                        sucursalActual = sucursal;
-                        mostrarUltimoCheckIn();
-                    }
-                }
-            });
-
-            cerrarSesionAdmin.addEventListener('click', () => {
-                location.reload();
-            });
-
-            cerrarSesionEmpleado.addEventListener('click', () => {
-                location.reload();
-            });
-
-            document.getElementById('formCrear').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const nombre = document.getElementById('nuevoNombre').value.trim();
-                const nip = document.getElementById('nuevoNip').value.trim();
-                const rol = document.getElementById('nuevoRol').value;
-
-                const { error } = await supabase.from('usuarios').insert([{ nombre, nip, rol, activo: true }]);
-
-                if (error) {
-                    mensaje.textContent = '❌ Error al crear usuario';
-                } else {
-                    mensaje.textContent = `✅ Usuario ${nombre} creado correctamente`;
-                    document.getElementById('formCrear').reset();
-                    cargarUsuarios();
-                }
-            });
-
-            async function cargarUsuarios() {
-                const { data } = await supabase.from('usuarios').select('*').eq('activo', true);
-                const tabla = document.getElementById('tablaUsuarios');
-                tabla.innerHTML = '<tr><th>Nombre</th><th>Rol</th><th>Última entrada</th><th>Desactivar</th></tr>';
-                data.forEach ( user => {
-                    const fila = document.createElement('tr');
-                    fila.innerHTML = `
-                        <td>${user.nombre}</td>
-                        <td>${user.rol}</td>
-                        <td>${user.ultima_entrada ? new Date(user.ultima_entrada).toLocaleString() : '-'}</td>
-                        <td><button onclick="desactivarUsuario('${user.id}')">❌</button></td>
-                    `;
-                    tabla.appendChild(fila);
-                });
-            }
-
-            window.desactivarUsuario = async (id) => {
-                await supabase.from('usuarios').update({ activo: false }).eq('id', id);
-                mensaje.textContent = '⚠️ Usuario desactivado';
-                cargarUsuarios();
-            };
-
-            // FILTRO DE CHECADAS ADMIN (CORREGIDO Y DEPURADO)
-            document.getElementById('formFecha').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const fechaInicio = document.getElementById('fechaInicio').value;
-                const fechaFin = document.getElementById('fechaFin').value;
-
-                // Filtra por rango de fechas
-                const { data, error } = await supabase
-                    .from('checadas')
-                    .select('*')
-                    .gte('fecha', fechaInicio)
-                    .lte('fecha', fechaFin)
-                    .order('fecha', { ascending: true })
-                    .order('hora', { ascending: true });
-
-                console.log('Checadas recibidas:', data, error);
-                const tabla = document.getElementById('tablaChecadas');
-                tabla.innerHTML = '<tr><th>Nombre</th><th>Sucursal</th><th>Fecha</th><th>Hora</th><th>Tipo</th></tr>';
-                if (error) {
-                    tabla.innerHTML += `<tr><td colspan="5">Error al consultar checadas</td></tr>`;
-                    return;
-                }
-                if (!data || data.length === 0) {
-                    tabla.innerHTML += `<tr><td colspan="5">Sin resultados</td></tr>`;
-                    return;
-                }
-                data.forEach(row => {
-                    tabla.innerHTML += `<tr>
-                        <td>${row.nombre}</td>
-                        <td>${row.sucursal}</td>
-                        <td>${row.fecha}</td>
-                        <td>${row.hora}</td>
-                        <td>${row.tipo === 'entrada' ? 'Entrada' : 'Salida'}</td>
-                    </tr>`;
-                });
-
-                window.checadasExport = data;
-            });
-
-            // Botón para descargar Excel
-            document.getElementById('btnDescargarExcel').addEventListener('click', () => {
-                const datos = window.checadasExport || [];
-                if (!datos.length) {
-                    alert('No hay datos para exportar');
-                    return;
-                }
-                // Generar CSV
-                const encabezados = ['Nombre', 'Sucursal', 'Fecha', 'Hora', 'Tipo'];
-                const filas = datos.map(row => [
-                    row.nombre,
-                    row.sucursal,
-                    row.fecha,
-                    row.hora,
-                    row.tipo
-                ]);
-                let csv = encabezados.join(',') + '\n';
-                filas.forEach(fila => {
-                    csv += fila.map(campo => `"${(campo || '').toString().replace(/"/g, '""')}"`).join(',') + '\n';
-                });
-
-                // Descargar como archivo .csv
-                const blob = new Blob([csv], { type: 'text/csv' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'checadas.csv';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-            });
-
-            document.getElementById('formAviso').addEventListener('submit', (e) => {
-                e.preventDefault();
-                const texto = document.getElementById('avisoTexto').value;
-                const rol = document.getElementById('rolDestino').value;
-                const sucursal = document.getElementById('sucursales').value;
-                mensaje.textContent = `📣 Aviso enviado a ${rol} en ${sucursal}`;
-                e.target.reset();
-            });
-
-            document.getElementById('formReporte').addEventListener('submit', (e) => {
-                e.preventDefault();
-                const link = document.getElementById('nuevoLink').value;
-                localStorage.setItem('linkReporte', link);
-                mensaje.textContent = '🔗 Link actualizado correctamente';
-            });
-
-            // NUEVO: FORMULARIO INVENTARIO
-            document.getElementById('formInventario').addEventListener('submit', (e) => {
-                e.preventDefault();
-                const link = document.getElementById('nuevoLinkInventario').value;
-                localStorage.setItem('linkInventario', link);
-                mensaje.textContent = '📦 Link de inventario actualizado correctamente';
-            });
-
-            async function cargarAvisos() {
-                const { data } = await supabase.from('avisos').select('*');
-                const tabla = document.getElementById('tablaAvisosEmpleado');
-                tabla.innerHTML = '<tr><th>Aviso</th><th>Rol</th><th>Sucursal</th></tr>';
-                data.forEach(aviso => {
-                    const fila = document.createElement('tr');
-                    fila.innerHTML = `<td>${aviso.texto}</td><td>${aviso.rol}</td><td>${aviso.sucursal}</td>`;
-                    tabla.appendChild(fila);
-                });
-            }
-
-            window.mostrarSeccion = (id) => {
-                for (const key in secciones) {
-                    secciones[key].style.display = 'none';
-                }
-                secciones[id].style.display = 'block';
-                if (id === 'verUsuarios') cargarUsuarios();
-            };
-
-            // Cambia las funciones de localStorage para que sean por usuario y por día
-            function setCheckInStatus(status, fechaLocal, usuarioId) {
-                localStorage.setItem(`checkInStatus_${usuarioId}_${fechaLocal}`, status);
-            }
-
-            function getCheckInStatus(fechaLocal, usuarioId) {
-                const status = localStorage.getItem(`checkInStatus_${usuarioId}_${fechaLocal}`);
-                if (status === 'REALIZADO') {
-                    return 'Check In REALIZADO';
-                }
-                return 'Check In NO realizado';
-            }
-
-            // Check In
-            document.getElementById('btnCheckIn').addEventListener('click', async () => {
-                if (!usuarioActual) return;
-                const fechaLocal = getFechaLocal();
-                const hora = new Date().toLocaleTimeString();
-
-                navigator.geolocation.getCurrentPosition(async (pos) => {
-                    const lat = pos.coords.latitude;
-                    const lng = pos.coords.longitude;
-                    await supabase.from('checadas').insert([{
-                        usuario_id: usuarioActual.id,
-                        nombre: usuarioActual.nombre,
-                        sucursal: sucursalActual,
-                        fecha: fechaLocal,
-                        hora: hora,
-                        tipo: 'entrada',
-                        ubicacion: `${lat},${lng}`
-                    }]);
-                    mensaje.textContent = '✅ Check In registrado';
-                    setCheckInStatus('REALIZADO', fechaLocal, usuarioActual.id);
-                    document.getElementById('ultimoCheckIn').textContent = 'Check In REALIZADO';
-                    document.getElementById('ultimoCheckIn').style.color = '#28a745';
-                }, (err) => {
-                    mensaje.textContent = '❌ No se pudo obtener la ubicación';
-                });
-            });
-
-            // Evento Check Out con ubicación guardada en Supabase
-            document.getElementById('btnCheckOut').addEventListener('click', async () => {
-                if (!usuarioActual) return;
-                const fechaLocal = getFechaLocal();
-                const hora = new Date().toLocaleTimeString();
-
-                navigator.geolocation.getCurrentPosition(async (pos) => {
-                    const lat = pos.coords.latitude;
-                    const lng = pos.coords.longitude;
-                    await supabase.from('checadas').insert([{
-                        usuario_id: usuarioActual.id,
-                        nombre: usuarioActual.nombre,
-                        sucursal: sucursalActual,
-                        fecha: fechaLocal,
-                        hora: hora,
-                        tipo: 'salida',
-                        ubicacion: `${lat},${lng}`
-                    }]);
-                    document.getElementById('ultimoCheckIn').textContent = 'Check In NO realizado';
-                    document.getElementById('ultimoCheckIn').style.color = '#dc3545';
-                    mensaje.textContent = '✅ Check Out registrado';
-                    setCheckInStatus('NO', fechaLocal, usuarioActual.id);
-                    localStorage.removeItem(`sucursalEmpleado_${usuarioActual.id}_${fechaLocal}`);
-                }, (err) => {
-                    mensaje.textContent = '❌ No se pudo obtener la ubicación';
-                });
-            });
-
-            function mostrarUltimoCheckIn() {
-                const fechaLocal = getFechaLocal();
-                if (!usuarioActual) return;
-                const texto = getCheckInStatus(fechaLocal, usuarioActual.id);
-                const div = document.getElementById('ultimoCheckIn');
-                div.textContent = texto;
-                if (texto === 'Check In REALIZADO') {
-                    div.style.color = '#28a745'; // verde
-                } else {
-                    div.style.color = '#dc3545'; // rojo
-                }
-            }
-
-            // Tabulador
-            document.getElementById('billetesForm').addEventListener('submit', function(event) {
-                event.preventDefault();
-
-                const fecha = document.getElementById('fecha').value;
-                const sucursal = document.getElementById('sucursal').value;
-                const responsable = document.getElementById('responsable').value.toUpperCase();
-                const billetes = {
-                    mil: parseInt(document.getElementById('mil').value),
-                    quinientos: parseInt(document.getElementById('quinientos').value),
-                    doscientos: parseInt(document.getElementById('doscientos').value),
-                    cien: parseInt(document.getElementById('cien').value),
-                    cincuenta: parseInt(document.getElementById('cincuenta').value),
-                    veinte: parseInt(document.getElementById('veinte').value),
-                    monedas: parseInt(document.getElementById('monedas').value)
-                };
-
-                const total = (billetes.mil * 1000) + (billetes.quinientos * 500) +
-                            (billetes.doscientos * 200) + (billetes.cien * 100) +
-                            (billetes.cincuenta * 50) + (billetes.veinte * 20) + billetes.monedas;
-
-                const qrData = {
-                    fecha: formatDate(fecha),
-                    sucursal: sucursal,
-                    responsable: responsable,
-                    total: total,
-                    billetes: billetes
-                };
-
-                document.getElementById('sucursalResult').innerText = `Sucursal: ${sucursal}`;
-                document.getElementById('responsableResult').innerText = `Responsable: ${responsable}`;
-                document.getElementById('fechaResult').innerText = `Fecha: ${formatDate(fecha)}`;
-                document.getElementById('detallesResult').innerHTML = `$1000: ${billetes.mil}<br>$500: ${billetes.quinientos}<br>$200: ${billetes.doscientos}<br>$100: ${billetes.cien}<br>$50: ${billetes.cincuenta}<br>$20: ${billetes.veinte}<br>Monedas: ${billetes.monedas}`;
-                document.getElementById('totalResult').innerText = formatNumber(total);
-
-                QRCode.toDataURL(JSON.stringify(qrData), { width: 400, margin: 1 }, function (err, url) {
-                    if (!err) {
-                        document.getElementById('qrCode').src = url;
-                    }
-                });
-
-                document.getElementById('ticketResult').style.display = 'block';
-            });
-
-            // Botón para mostrar el tabulador
-            document.getElementById('btnMostrarTabulador').addEventListener('click', () => {
-                mostrarSeccion('tabuladorEmpleado');
-            });
-
-            // NUEVO: Botón para mostrar el formulario Amigo Paguitos
-            document.getElementById('btnMostrarAmigoPaguitos').addEventListener('click', () => {
-                mostrarSeccion('amigoPaguitos');
-            });
-
-            // NUEVO: Botón para mostrar el formulario Tarifario
-            document.getElementById('btnMostrarTarifario').addEventListener('click', () => {
-                mostrarSeccion('tarifario');
-            });
-
-            // Imprimir etiqueta
-            document.querySelector('.print-btn').addEventListener('click', printEtiqueta);
-            document.getElementById('downloadBtn').addEventListener('click', downloadEtiqueta);
-        });
-
-        function formatNumber(number) {
-            return new Intl.NumberFormat('es-MX').format(number);
-        }
-
-        function formatDate(fecha) {
-            const [year, month, day] = fecha.split('-');
-            return `${day}/${month}/${year}`;
-        }
-
-        function printEtiqueta() {
-            const ticket = document.querySelector('.ticket');
-            html2canvas(ticket).then(canvas => {
-                const printWindow = window.open('', '', 'width=80mm,height=600');
-                printWindow.document.write('<html><head><title>Etiqueta</title></head><body style="margin:0;padding:0;">');
-                printWindow.document.body.appendChild(canvas);
-                printWindow.document.write('</body></html>');
-                printWindow.document.close();
-                printWindow.focus();
-                printWindow.print();
-                printWindow.close();
-            });
-        }
-
-        function downloadEtiqueta() {
-            const ticket = document.querySelector('.ticket');
-            const sucursal = document.getElementById('sucursal').value.charAt(0);
-            const fecha = document.getElementById('fecha').value;
-            const [year, month, day] = fecha.split('-');
-            const fileName = `${sucursal}${day}${month}`;
-
-            html2canvas(ticket).then(canvas => {
-                const link = document.createElement('a');
-                link.download = `${fileName}.png`;
-                link.href = canvas.toDataURL();
-                link.click();
-            });
-        }
-
-        // El desfase de la fecha ocurre porque new Date().toISOString().slice(0,10) da la fecha en UTC, 
-        // lo que puede adelantar el día según tu zona horaria. 
-        // Usa la fecha local así:
-        function getFechaLocal() {
-            const hoy = new Date();
-            const yyyy = hoy.getFullYear();
-            const mm = String(hoy.getMonth() + 1).padStart(2, '0');
-            const dd = String(hoy.getDate()).padStart(2, '0');
-            return `${yyyy}-${mm}-${dd}`;
-        }
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Administrador de Sobres</title>
+  
+  <!-- Agregar la fuente Poppins desde Google Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap">
+  
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f4f6f8;
+      color: #333;
+      margin: 0;
+      padding: 10px;
+      max-width: 800px;
+      margin: auto;
+    }
+    h1 {
+      color: #4a90e2;
+      text-align: center;
+      margin-bottom: 15px;
+      font-size: 22px;
+    }
+    label {
+      color: #4a90e2;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    input, select, button {
+      display: block;
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    select {
+      background-color: #fff;
+      color: #333;
+    }
+    input[type="text"] {
+      text-transform: uppercase; /* Transformar automáticamente en mayúsculas */
+    }
+    button {
+      background-color: #4a90e2;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    button:hover {
+      background-color: #357abd;
+    }
+    .ticket {
+      width: 80mm;
+      border: 1px solid #4a90e2;
+      padding: 15px;
+      margin-top: 15px;
+      background-color: #fff;
+      font-size: 16px;
+      font-family: 'Poppins', sans-serif; /* Asegurar la fuente */
+    }
+    .ticket h2 {
+      color: #4a90e2;
+      margin-bottom: 8px;
+      font-size: 20px;
+    }
+    .ticket p, .ticket h3 {
+      margin: 0;
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+    .ticket img {
+      display: block;
+      margin: auto;
+      max-width: 180px; /* Aumentar aún más el tamaño del QR */
+    }
+    .total-center {
+      text-align: center;
+      font-size: 28px; /* Hacer el total mucho más grande */
+      font-weight: 700;
+    }
+    .print-btn {
+      margin-top: 20px;
+      background-color: #28a745;
+      color: #fff;
+      font-size: 14px;
+    }
+    .print-btn:hover {
+      background-color: #218838;
+    }
+
+    /* Optimización para impresión */
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      .ticket, .ticket * {
+        visibility: visible;
+      }
+      .ticket {
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
+    }
+
+    /* Negritas para la fecha */
+    .bold {
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
-    <!-- Logo de la empresa siempre arriba (Imgur embed) -->
-    <div style="width:100%; display:flex; justify-content:center; margin-top:24px;">
-        <blockquote class="imgur-embed-pub" lang="en" data-id="a/J2wCfFZ" data-context="false">
-            <a href="//imgur.com/a/J2wCfFZ"></a>
-        </blockquote>
-    </div>
+  <h1>Ingreso de Billetes</h1>
+  <form id="billetesForm">
+    <label for="fecha">Fecha:</label>
+    <input type="date" id="fecha" name="fecha" required><br>
 
-    <h2 id="loginTitle"><i class="fas fa-lock"></i> Iniciar sesión en Jeeapcel</h2>
-    <h3 id="bienvenida"></h3>
-    <form id="loginForm">
-        <input type="text" id="nombre" placeholder="Nombre" required>
-        <input type="password" id="nip" placeholder="NIP" required>
-        <button type="submit">Entrar</button>
-    </form>
+    <label for="sucursal">Sucursal:</label>
+    <select id="sucursal" name="sucursal" required>
+      <option value="" selected disabled>Seleccionar Sucursal</option>
+      <option value="A">AMIRA</option>
+      <option value="B">BELEM</option>
+      <option value="C">CARLA</option>
+      <option value="D">DANNA</option>
+      <option value="E">ELENA</option>
+      <option value="F">FANNY</option>
+    </select><br>
 
-    <div class="panel" id="adminPanel">
-        <h3><i class="fas fa-user-shield"></i> Panel de administrador</h3>
-        <div style="display:flex; flex-wrap:wrap; gap:8px; justify-content:center;">
-            <button onclick="mostrarSeccion('crear')"><i class="fas fa-user-plus"></i> Crear Usuario</button>
-            <button onclick="mostrarSeccion('verUsuarios')"><i class="fas fa-users"></i> Ver Usuarios</button>
-            <button onclick="mostrarSeccion('checadas')"><i class="fas fa-calendar-check"></i> Checadas</button>
-            <button onclick="mostrarSeccion('aviso')"><i class="fas fa-bullhorn"></i> Aviso</button>
-        </div>
-        <div style="display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-top:10px;">
-            <button onclick="mostrarSeccion('reporte')"><i class="fas fa-link"></i> Link Reportes</button>
-            <button onclick="mostrarSeccion('inventario')"><i class="fas fa-boxes"></i> Link Inventario</button>
-            <button id="cerrarSesionAdmin" style="background:#ff4d4f;"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</button>
-        </div>
+    <label for="responsable">Responsable:</label>
+    <input type="text" id="responsable" name="responsable" placeholder="Nombre del responsable" required><br>
 
-        <div id="seccionCrear" class="seccion">
-            <h4><i class="fas fa-user-plus"></i> Crear Usuario</h4>
-            <form id="formCrear">
-                <input type="text" id="nuevoNombre" placeholder="Nombre" required><br>
-                <input type="password" id="nuevoNip" placeholder="NIP" required><br>
-                <select id="nuevoRol" required>
-                    <option value="">Selecciona un rol</option>
-                    <option value="admin">admin</option>
-                    <option value="supervisor">supervisor</option>
-                    <option value="empleado">empleado</option>
-                </select><br>
-                <button type="submit">Crear</button>
-            </form>
-        </div>
+    <label for="mil">$1000:</label>
+    <input type="number" id="mil" name="mil" value="0" required><br>
 
-        <div id="seccionUsuarios" class="seccion">
-            <h4><i class="fas fa-users"></i> Usuarios activos</h4>
-            <table id="tablaUsuarios"></table>
-        </div>
+    <label for="quinientos">$500:</label>
+    <input type="number" id="quinientos" name="quinientos" value="0" required><br>
 
-        <div id="seccionChecadas" class="seccion">
-            <h4><i class="fas fa-calendar-check"></i> Checadas por fecha</h4>
-            <form id="formFecha">
-                <input type="date" id="fechaInicio" required>
-                <input type="date" id="fechaFin" required>
-                <button type="submit"><i class="fas fa-search"></i> Buscar</button>
-                <button type="button" id="btnDescargarExcel"><i class="fas fa-file-excel"></i> Descargar Excel</button>
-            </form>
-            <table id="tablaChecadas"></table>
-        </div>
+    <label for="doscientos">$200:</label>
+    <input type="number" id="doscientos" name="doscientos" value="0" required><br>
 
-        <div id="seccionAviso" class="seccion">
-            <h4><i class="fas fa-bullhorn"></i> Crear Aviso</h4>
-            <form id="formAviso">
-                <textarea id="avisoTexto" placeholder="Escribe el aviso..." required></textarea><br>
-                <select id="rolDestino">
-                    <option value="todos">Todos los roles</option>
-                    <option value="admin">Solo admins</option>
-                    <option value="supervisor">Supervisores</option>
-                    <option value="empleado">Empleados</option>
-                </select>
-                <select id="sucursales">
-                    <option value="todas">Todas las sucursales</option>
-                    <option value="A">Sucursal A</option>
-                    <option value="B">Sucursal B</option>
-                    <option value="C">Sucursal C</option>
-                    <option value="D">Sucursal D</option>
-                    <option value="E">Sucursal E</option>
-                    <option value="F">Sucursal F</option>
-                </select>
-                <button type="submit"><i class="fas fa-paper-plane"></i> Enviar aviso</button>
-            </form>
-        </div>
+    <label for="cien">$100:</label>
+    <input type="number" id="cien" name="cien" value="0" required><br>
 
-        <div id="seccionReporte" class="seccion">
-            <h4><i class="fas fa-link"></i> Actualizar link de reportes</h4>
-            <form id="formReporte">
-                <input type="url" id="nuevoLink" placeholder="Pega aquí el nuevo link del reporte" required>
-                <button type="submit"><i class="fas fa-save"></i> Actualizar</button>
-            </form>
-        </div>
+    <label for="cincuenta">$50:</label>
+    <input type="number" id="cincuenta" name="cincuenta" value="0" required><br>
 
-        <!-- NUEVA SECCIÓN PARA INVENTARIO -->
-        <div id="seccionInventario" class="seccion">
-            <h4><i class="fas fa-boxes"></i> Actualizar link de inventario</h4>
-            <form id="formInventario">
-                <input type="url" id="nuevoLinkInventario" placeholder="Pega aquí el nuevo link de inventario" required>
-                <button type="submit"><i class="fas fa-save"></i> Actualizar</button>
-            </form>
-        </div>
-    </div>
+    <label for="veinte">$20:</label>
+    <input type="number" id="veinte" name="veinte" value="0" required><br>
 
-    <div class="panel" id="empleadoPanel">
-        <h3><i class="fas fa-user"></i> Panel de Empleado</h3>
-        <h4 id="sucursalEmpleado"></h4>
-        <div id="ultimoCheckIn" style="margin-bottom:10px; color:#28a745; font-weight:bold;"></div>
-        <div class="check-btns">
-            <button id="btnCheckIn" style="background:#28a745;"><i class="fas fa-sign-in-alt"></i> Check In</button>
-            <button id="btnCheckOut" style="background:#dc3545;"><i class="fas fa-sign-out-alt"></i> Check Out</button>
-        </div>
-        <!-- Botones en un solo renglón, íconos visibles -->
-        <div class="main-btns">
-            <button id="btnMostrarTabulador"><i class="fas fa-table"></i>Tabulador</button>
-            <button onclick="window.open(localStorage.getItem('linkReporte'), '_blank')"><i class="fas fa-link"></i>Reportes</button>
-            <button onclick="mostrarSeccion('avisosEmpleado')"><i class="fas fa-bullhorn"></i>Avisos</button>
-            <button id="btnMostrarAmigoPaguitos"><i class="fas fa-user-friends"></i>Amigo Paguitos</button>
-            <button id="btnMostrarTarifario"><i class="fas fa-file-alt"></i>Tarifario</button>
-            <button onclick="window.open(localStorage.getItem('linkInventario'), '_blank')"><i class="fas fa-boxes"></i>Inventarios</button>
-        </div>
-        <div class="logout-btn">
-            <button id="cerrarSesionEmpleado"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</button>
-        </div>
+    <label for="monedas">Monedas:</label>
+    <input type="number" id="monedas" name="monedas" value="0" required><br>
 
-        <div id="seccionAvisosEmpleado" class="seccion">
-            <h4><i class="fas fa-bullhorn"></i> Avisos</h4>
-            <table id="tablaAvisosEmpleado"></table>
-        </div>
+    <button type="submit">Generar QR</button>
+  </form>
 
-        <div id="seccionTabuladorEmpleado" class="seccion">
-            <h4><i class="fas fa-table"></i> Tabulador de Ingreso de Billetes</h4>
-            <form id="billetesForm">
-                <label for="fecha">Fecha:</label>
-                <input type="date" id="fecha" name="fecha" required>
+  <div id="ticketResult" class="ticket" style="display:none;">
+    <h2 id="sucursalResult"></h2>
+    <p id="responsableResult"></p>
+    <p><span id="fechaResult" class="bold"></span></p>
+    <p id="detallesResult"></p>
+    <img id="qrCode" src="" alt="Código QR">
+    <h3 class="total-center">Total: $<span id="totalResult"></span></h3>
+  </div>
 
-                <label for="sucursal">Sucursal:</label>
-                <select id="sucursal" name="sucursal" required>
-                    <option value="" selected disabled>Seleccionar Sucursal</option>
-                    <option value="A">AMIRA</option>
-                    <option value="B">BELEM</option>
-                    <option value="C">CARLA</option>
-                    <option value="D">DANNA</option>
-                    <option value="E">ELENA</option>
-                    <option value="F">FANNY</option>
-                </select>
+  <!-- Botones para imprimir y descargar etiqueta -->
+  <button class="print-btn" onclick="printEtiqueta();">Imprimir Etiqueta</button>
+  <button class="print-btn" id="downloadBtn">Descargar Etiqueta</button>
 
-                <label for="responsable">Responsable:</label>
-                <input type="text" id="responsable" name="responsable" placeholder="Nombre del responsable" required>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script>
+    function formatNumber(number) {
+      return new Intl.NumberFormat('es-MX').format(number);
+    }
 
-                <label for="mil">$1000:</label>
-                <input type="number" id="mil" name="mil" value="0" required>
+    function formatDate(fecha) {
+      const [year, month, day] = fecha.split('-');
+      return `${day}/${month}/${year}`;
+    }
 
-                <label for="quinientos">$500:</label>
-                <input type="number" id="quinientos" name="quinientos" value="0" required>
+    function printEtiqueta() {
+      const ticket = document.querySelector('.ticket');
+      html2canvas(ticket).then(canvas => {
+        const printWindow = window.open('', '', 'width=80mm,height=600');
+        printWindow.document.write('<html><head><title>Etiqueta</title></head><body style="margin:0;padding:0;">');
+        printWindow.document.body.appendChild(canvas); // Añade el canvas directamente
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        printWindow.focus();
+        printWindow.print();
+        printWindow.close();
+      });
+    }
 
-                <label for="doscientos">$200:</label>
-                <input type="number" id="doscientos" name="doscientos" value="0" required>
+    function downloadEtiqueta() {
+      const ticket = document.querySelector('.ticket');
+      const sucursal = document.getElementById('sucursal').value.charAt(0);
+      const fecha = document.getElementById('fecha').value;
+      const [year, month, day] = fecha.split('-');
+      const fileName = `${sucursal}${day}${month}`;
 
-                <label for="cien">$100:</label>
-                <input type="number" id="cien" name="cien" value="0" required>
+      html2canvas(ticket).then(canvas => {
+        const link = document.createElement('a');
+        link.download = `${fileName}.png`;
+        link.href = canvas.toDataURL();
+        link.click();
+      });
+    }
 
-                <label for="cincuenta">$50:</label>
-                <input type="number" id="cincuenta" name="cincuenta" value="0" required>
+    document.getElementById('billetesForm').addEventListener('submit', function(event) {
+      event.preventDefault();
 
-                <label for="veinte">$20:</label>
-                <input type="number" id="veinte" name="veinte" value="0" required>
+      const fecha = document.getElementById('fecha').value;
+      const sucursal = document.getElementById('sucursal').value;
+      const responsable = document.getElementById('responsable').value.toUpperCase(); // Forzar mayúsculas
+      const billetes = {
+        mil: parseInt(document.getElementById('mil').value),
+        quinientos: parseInt(document.getElementById('quinientos').value),
+        doscientos: parseInt(document.getElementById('doscientos').value),
+        cien: parseInt(document.getElementById('cien').value),
+        cincuenta: parseInt(document.getElementById('cincuenta').value),
+        veinte: parseInt(document.getElementById('veinte').value),
+        monedas: parseInt(document.getElementById('monedas').value)
+      };
 
-                <label for="monedas">Monedas:</label>
-                <input type="number" id="monedas" name="monedas" value="0" required>
+      const total = (billetes.mil * 1000) + (billetes.quinientos * 500) +
+                    (billetes.doscientos * 200) + (billetes.cien * 100) +
+                    (billetes.cincuenta * 50) + (billetes.veinte * 20) + billetes.monedas;
 
-                <button type="submit"><i class="fas fa-qrcode"></i> Generar QR</button>
-            </form>
+      const qrData = {
+        fecha: formatDate(fecha),
+        sucursal: sucursal,
+        responsable: responsable,
+        total: total,
+        billetes: billetes
+      };
 
-            <div id="ticketResult" class="ticket" style="display:none;">
-                <h2 id="sucursalResult"></h2>
-                <p id="responsableResult"></p>
-                <p><span id="fechaResult" class="bold"></span></p>
-                <p id="detallesResult"></p>
-                <img id="qrCode" src="" alt="Código QR">
-                <h3 class="total-center">Total: $<span id="totalResult"></span></h3>
-            </div>
+      // Mostrar resultados
+      document.getElementById('sucursalResult').innerText = `Sucursal: ${sucursal}`;
+      document.getElementById('responsableResult').innerText = `Responsable: ${responsable}`;
+      document.getElementById('fechaResult').innerText = `Fecha: ${formatDate(fecha)}`;
+      document.getElementById('detallesResult').innerHTML = `$1000: ${billetes.mil}<br>$500: ${billetes.quinientos}<br>$200: ${billetes.doscientos}<br>$100: ${billetes.cien}<br>$50: ${billetes.cincuenta}<br>$20: ${billetes.veinte}<br>Monedas: ${billetes.monedas}`;
+      document.getElementById('totalResult').innerText = formatNumber(total);
 
-            <button class="print-btn" onclick="printEtiqueta();"><i class="fas fa-print"></i> Imprimir Etiqueta</button>
-            <button class="print-btn" id="downloadBtn"><i class="fas fa-download"></i> Descargar Etiqueta</button>
-        </div>
+      // Generar QR
+      QRCode.toDataURL(JSON.stringify(qrData), { width: 400, margin: 1 }, function (err, url) {
+        if (!err) {
+          document.getElementById('qrCode').src = url;
+        }
+      });
 
-        <div style="margin: 20px 0; display:flex; gap:8px; justify-content:center;">
-        </div>
+      document.getElementById('ticketResult').style.display = 'block';
+    });
 
-        <div id="seccionAmigoPaguitos" class="seccion">
-            <h4><i class="fas fa-user-friends"></i> Amigo Paguitos - Formulario</h4>
-            <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSc_rGTuBDJ3IcqjMFk0xnkte_foRZaQWJ6k2tbDQ6h10Wt4Rg/viewform?embedded=true" width="100%" height="1200" frameborder="0" marginheight="0" marginwidth="0" style="background:#fff; border-radius:12px;">Cargando…</iframe>
-        </div>
-
-        <div id="seccionTarifario" class="seccion">
-            <h4><i class="fas fa-file-alt"></i> Tarifario - Formulario</h4>
-            <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSeKUqZFXZ5pi7CrcfwJUEQCg0Bd1F2GGrEnyPtDbwLn_ohOeQ/viewform?embedded=true" width="100%" height="1200" frameborder="0" marginheight="0" marginwidth="0" style="background:#fff; border-radius:12px;">Cargando…</iframe>
-        </div>
-    </div>
-
-    <div id="mensaje"></div>
-    <div style="width:100%; display:flex; justify-content:center; margin:80px 0 36px 0;">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/a/ab/Telcel_logo_2022.svg" alt="Telcel" style="max-width:120px; height:auto; opacity:0.85;">
-    </div>
-    <script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
+    document.getElementById('downloadBtn').addEventListener('click', downloadEtiqueta);
+  </script>
 </body>
 </html>
